@@ -2,17 +2,21 @@ use lettre::{ClientSecurity, ClientTlsParameters, SmtpClient, Transport};
 use lettre::smtp::{authentication::{Credentials, Mechanism}, ConnectionReuseParameters};
 use native_tls::{Protocol, TlsConnector};
 use lettre_email::Email;
+use lettre_email::Mailbox;
 use log::{ info, error };
 use std::time::Duration;
+// use serde_json::{Result, Value};
 
-pub fn send_mail() {
+pub fn send_mail(sender: &str, receiver: &str, cc: &str, subject: &str, content: &str) {
     let email = Email::builder()
         // Addresses can be specified by the tuple (email, alias)
-        .to(("21828604@qq.com", "betta"))
-        .from("lightstrawberry@163.com")
-        .subject("Hi, Hello world")
-        .text("Hello world.")
+        .to(receiver.to_owned())
+        .from(sender.to_owned())
+        .subject(subject.to_owned())
+        .text(content.to_owned())
         .build();
+
+    println!("{:#?}", email);
 
     // Open a local connection on port 25
     let creds = Credentials::new(
